@@ -1,6 +1,7 @@
-const CACHE_NAME = 'baby-sleep-tracker-v1';
+const CACHE_NAME = 'baby-sleep-tracker-v2';
 const ASSETS = [
     './',
+    './index.html',
     './rutina-sueno.html',
     './manifest.json',
     './icons/icon-192.png',

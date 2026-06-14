@@ -2,7 +2,7 @@
     "name": "Rutina de Sueño - Baby Sleep Tracker",
     "short_name": "Sueño Baby",
     "description": "Seguimiento diario del sueño de tu bebé",
-    "start_url": "./rutina-sueno.html",
+    "start_url": "./index.html",
     "display": "standalone",
     "background_color": "#fdf2f8",
     "theme_color": "#a78bfa",
