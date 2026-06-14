@@ -1,0 +1,1679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rutina de Sueño - Baby Sleep Tracker</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#a78bfa">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Sueño Baby">
+    <meta name="description" content="Seguimiento diario del sueño de tu bebé">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #a78bfa;
+            --primary-light: #c4b5fd;
+            --primary-dark: #8b5cf6;
+            --pink: #f9a8d4;
+            --pink-light: #fbcfe8;
+            --mint: #6ee7b7;
+            --mint-light: #d1fae5;
+            --baby-blue: #93c5fd;
+            --baby-blue-light: #dbeafe;
+            --lavender: #c4b5fd;
+            --lavender-light: #ede9fe;
+            --peach: #fdba74;
+            --peach-light: #ffedd5;
+            --rose: #fda4af;
+            --rose-light: #ffe4e6;
+            --success: #6ee7b7;
+            --warning: #fcd34d;
+            --danger: #fca5a5;
+            --bg-gradient-start: #fdf2f8;
+            --bg-gradient-end: #ede9fe;
+            --bg-main: #ffffff;
+            --bg-card: #ffffff;
+            --bg-input: #fefce8;
+            --bg-header: #fdf2f8;
+            --bg-section: #f5f3ff;
+            --border-color: #e9d5ff;
+            --border-input: #e9d5ff;
+            --text-primary: #4a3462;
+            --text-secondary: #6b5b7b;
+            --text-muted: #9b8aad;
+            --text-light: #c4b5fd;
+            --shadow: 0 4px 16px rgba(167, 139, 250, 0.12);
+            --shadow-hover: 0 6px 20px rgba(167, 139, 250, 0.18);
+            --shadow-card: 0 2px 12px rgba(167, 139, 250, 0.08);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --radius-xs: 6px;
+        }
+
+        .dark-mode {
+            --bg-gradient-start: #1a1033;
+            --bg-gradient-end: #0f172a;
+            --bg-main: #1e1b4b;
+            --bg-card: #2d2555;
+            --bg-input: #3d3570;
+            --bg-header: #3d3570;
+            --bg-section: #2d2555;
+            --border-color: #4c3d8f;
+            --border-input: #4c3d8f;
+            --text-primary: #e8e0f0;
+            --text-secondary: #c4b5fd;
+            --text-muted: #9b8aad;
+            --text-light: #6b5b7b;
+            --shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.4);
+            --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding: 24px;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .header-title .icon {
+            font-size: 36px;
+            filter: drop-shadow(0 2px 4px rgba(167, 139, 250, 0.3));
+        }
+
+        .header-title h1 {
+            font-size: 26px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn:active { transform: translateY(0); }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark), #7c3aed);
+        }
+
+        .btn-secondary {
+            background: var(--bg-input);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-section);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .btn-icon {
+            width: 42px;
+            height: 42px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-sm);
+            font-size: 20px;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #fca5a5, #f87171);
+            color: #7f1d1d;
+        }
+
+        .dark-mode .btn-danger {
+            background: linear-gradient(135deg, #7f1d1d, #991b1b);
+            color: #fca5a5;
+        }
+
+        /* Baby Name */
+        .baby-name-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .baby-name-section label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .baby-name-section input {
+            flex: 1;
+            max-width: 300px;
+            padding: 10px 14px;
+            border: 2px solid var(--border-input);
+            border-radius: var(--radius-xs);
+            font-size: 15px;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            transition: all 0.25s ease;
+        }
+
+        .baby-name-section input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 24px;
+            background: var(--bg-card);
+            padding: 5px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 12px rgba(167, 139, 250, 0.3);
+        }
+
+        .tab:hover:not(.active) {
+            background: var(--bg-section);
+            color: var(--text-secondary);
+        }
+
+        /* Period Selector */
+        .period-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            transition: all 0.3s ease;
+        }
+
+        .period-selector label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .period-selector select {
+            padding: 8px 12px;
+            border: 2px solid var(--border-input);
+            border-radius: var(--radius-xs);
+            font-size: 14px;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .period-selector select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .week-nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .week-nav button {
+            width: 38px;
+            height: 38px;
+            border: 2px solid var(--border-input);
+            background: var(--bg-input);
+            border-radius: var(--radius-xs);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s ease;
+            color: var(--text-primary);
+        }
+
+        .week-nav button:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .week-info {
+            font-weight: 600;
+            color: var(--text-secondary);
+            min-width: 200px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* Day Tabs */
+        .day-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 20px;
+            background: var(--bg-card);
+            padding: 6px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+            transition: all 0.3s ease;
+        }
+
+        .day-tab {
+            flex: 1;
+            min-width: 70px;
+            padding: 12px 8px;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: center;
+        }
+
+        .day-tab.active {
+            background: linear-gradient(135deg, var(--pink), var(--primary));
+            color: white;
+            box-shadow: 0 4px 12px rgba(249, 168, 212, 0.3);
+        }
+
+        .day-tab:hover:not(.active) {
+            background: var(--bg-section);
+            color: var(--text-secondary);
+        }
+
+        .day-tab .day-date {
+            display: block;
+            font-size: 11px;
+            font-weight: 400;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+
+        /* Daily Cards */
+        .daily-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, var(--bg-section), var(--bg-header));
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-header .card-icon {
+            font-size: 22px;
+        }
+
+        .card-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .time-input {
+            width: 120px;
+            padding: 10px 12px;
+            border: 2px solid var(--border-input);
+            border-radius: var(--radius-xs);
+            font-size: 15px;
+            text-align: center;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            transition: all 0.25s ease;
+        }
+
+        .time-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
+        }
+
+        .text-input {
+            width: 80px;
+            padding: 10px 12px;
+            border: 2px solid var(--border-input);
+            border-radius: var(--radius-xs);
+            font-size: 15px;
+            text-align: center;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            transition: all 0.25s ease;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
+        }
+
+        .select-input {
+            padding: 8px 12px;
+            border: 2px solid var(--border-input);
+            border-radius: var(--radius-xs);
+            font-size: 14px;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .select-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .quality-buena { background: #d1fae5; color: #065f46; border-color: #6ee7b7; }
+        .quality-regular { background: #fef3c7; color: #92400e; border-color: #fcd34d; }
+        .quality-mala { background: #ffe4e6; color: #9f1239; border-color: #fda4af; }
+
+        .dark-mode .quality-buena { background: #064e3b; color: #6ee7b7; border-color: #065f46; }
+        .dark-mode .quality-regular { background: #78350f; color: #fcd34d; border-color: #92400e; }
+        .dark-mode .quality-mala { background: #881337; color: #fda4af; border-color: #9f1239; }
+
+        .notes-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-input);
+            border-radius: var(--radius-xs);
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            transition: all 0.25s ease;
+        }
+
+        .notes-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
+        }
+
+        /* Entry Rows */
+        .entry-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: var(--bg-section);
+            border-radius: var(--radius-xs);
+            border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .entry-row .remove-btn {
+            margin-left: auto;
+        }
+
+        .entry-row label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Add/Remove Buttons */
+        .add-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            background: transparent;
+            border: 2px dashed var(--primary-light);
+            border-radius: var(--radius-xs);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .add-btn:hover {
+            background: rgba(167, 139, 250, 0.08);
+            border-style: solid;
+            border-color: var(--primary);
+        }
+
+        .remove-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            background: rgba(252, 165, 165, 0.15);
+            border: none;
+            border-radius: var(--radius-xs);
+            color: #e11d48;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.25s ease;
+        }
+
+        .remove-btn:hover {
+            background: #e11d48;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* Week Notes */
+        .week-notes {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .week-notes label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .week-notes textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border-input);
+            border-radius: var(--radius-xs);
+            font-size: 14px;
+            resize: vertical;
+            min-height: 70px;
+            font-family: inherit;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            transition: all 0.25s ease;
+        }
+
+        .week-notes textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
+        }
+
+        /* Psychologist Notes */
+        .psychologist-notes {
+            background: linear-gradient(135deg, #fef3c7, #ffedd5);
+            border: 2px solid #fcd34d;
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .psychologist-notes {
+            background: linear-gradient(135deg, #78350f, #92400e);
+            border-color: #b45309;
+        }
+
+        .psychologist-notes h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #92400e;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dark-mode .psychologist-notes h4 {
+            color: #fcd34d;
+        }
+
+        .psychologist-notes textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #fcd34d;
+            border-radius: var(--radius-xs);
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            transition: all 0.25s ease;
+        }
+
+        .psychologist-notes textarea:focus {
+            outline: none;
+            border-color: var(--amber);
+            box-shadow: 0 0 0 3px rgba(252, 211, 77, 0.2);
+        }
+
+        /* Dashboard */
+        .dashboard { display: none; }
+        .dashboard.active { display: block; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            padding: 24px 16px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            box-shadow: var(--shadow);
+            transform: translateY(-2px);
+        }
+
+        .stat-card .stat-icon { font-size: 32px; margin-bottom: 10px; }
+
+        .stat-card .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-card .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .stat-card .stat-change {
+            font-size: 12px;
+            margin-top: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .stat-change.positive { background: #d1fae5; color: #065f46; }
+        .stat-change.negative { background: #ffe4e6; color: #9f1239; }
+        .stat-change.neutral { background: var(--bg-section); color: var(--text-secondary); }
+
+        .dark-mode .stat-change.positive { background: #064e3b; color: #6ee7b7; }
+        .dark-mode .stat-change.negative { background: #881337; color: #fda4af; }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .chart-card {
+            background: var(--bg-card);
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .chart-card h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 260px;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .summary-table th,
+        .summary-table td {
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 13px;
+        }
+
+        .summary-table th {
+            background: var(--bg-header);
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: var(--bg-card);
+            padding: 28px;
+            border-radius: var(--radius);
+            max-width: 450px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .modal h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .modal p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        /* Grid Footer */
+        .grid-footer {
+            padding: 16px;
+            background: var(--bg-section);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state .empty-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+            opacity: 0.6;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 12px; }
+            .header { flex-direction: column; text-align: center; padding: 20px; }
+            .header-actions { justify-content: center; width: 100%; }
+            .period-selector { flex-direction: column; gap: 10px; }
+            .tabs { flex-direction: column; }
+            .day-tabs { gap: 4px; padding: 4px; }
+            .day-tab { min-width: 50px; padding: 10px 6px; font-size: 12px; }
+            .charts-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .card-body { padding: 16px; }
+            .entry-row { flex-direction: column; align-items: stretch; }
+            .entry-row .remove-btn { margin-left: 0; align-self: flex-end; }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .header-title h1 { font-size: 22px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <span class="icon">&#128118;</span>
+                <div>
+                    <h1>Rutina de Sue&#241;o</h1>
+                    <p>Seguimiento diario del beb&#233;</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <label class="btn btn-secondary">
+                    &#128228; Importar
+                    <input type="file" accept=".json" id="importFile" style="display:none">
+                </label>
+                <button class="btn btn-primary" onclick="exportJSON()">&#128190; JSON</button>
+                <button class="btn btn-secondary" onclick="exportCSV()">&#128202; CSV</button>
+                <button class="btn btn-icon btn-secondary" onclick="toggleDarkMode()" id="darkModeBtn" title="Modo nocturno">&#9789;</button>
+            </div>
+        </div>
+
+        <div class="baby-name-section">
+            <label>&#128118; Nombre:</label>
+            <input type="text" id="babyName" placeholder="Ej: Sof&#237;a" oninput="saveBabyName()">
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('register')">&#128221; Registro Diario</button>
+            <button class="tab" onclick="switchTab('dashboard')">&#128200; Dashboard Semanal</button>
+        </div>
+
+        <div id="registerTab">
+            <div class="period-selector">
+                <label>Mes:</label>
+                <select id="monthSelect" onchange="updateWeeks()"></select>
+                <label>A&#241;o:</label>
+                <select id="yearSelect" onchange="updateWeeks()"></select>
+                <div class="week-nav">
+                    <button onclick="prevWeek()">&#8249;</button>
+                    <span class="week-info" id="weekInfo"></span>
+                    <button onclick="nextWeek()">&#8250;</button>
+                </div>
+            </div>
+
+            <div class="week-notes">
+                <label>&#128221; Notas de la semana:</label>
+                <textarea id="weekNotes" placeholder="Observaciones generales de la semana..." oninput="saveData()"></textarea>
+            </div>
+
+            <div class="day-tabs" id="dayTabs"></div>
+
+            <div class="daily-cards" id="dailyCards"></div>
+
+            <div class="psychologist-notes">
+                <h4>&#128218; Observaciones del Profesional</h4>
+                <textarea id="psychologistNotes" placeholder="El psic&#243;logo puede agregar sus observaciones..." oninput="saveData()"></textarea>
+            </div>
+        </div>
+
+        <div id="dashboardTab" class="dashboard">
+            <div class="stats-grid" id="statsGrid"></div>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>&#128164; Horas de Sue&#241;o Nocturno</h3>
+                    <div class="chart-container"><canvas id="sleepHoursChart"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <h3>&#128564; Siestas por D&#237;a</h3>
+                    <div class="chart-container"><canvas id="napsChart"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <h3>&#127749; Despertares Nocturnos</h3>
+                    <div class="chart-container"><canvas id="wakingsChart"></canvas></div>
+                </div>
+                <div class="chart-card">
+                    <h3>&#127919; Calidad del Sue&#241;o</h3>
+                    <div class="chart-container"><canvas id="qualityChart"></canvas></div>
+                </div>
+            </div>
+            <div class="chart-card" style="margin-top: 20px;">
+                <h3>&#128203; Resumen Semanal</h3>
+                <table class="summary-table">
+                    <thead>
+                        <tr>
+                            <th>D&#237;a</th>
+                            <th>Despertar</th>
+                            <th>Siestas</th>
+                            <th>Total Sue&#241;o</th>
+                            <th>Despertares</th>
+                            <th>Calidad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="summaryBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="importModal">
+        <div class="modal">
+            <h3>&#128228; Importar Datos</h3>
+            <p>Se importar&#225;n los datos del archivo. Esto reemplazar&#225; los datos actuales.</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn btn-primary" onclick="confirmImport()">Importar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'baby-sleep-tracker';
+        const DARK_MODE_KEY = 'baby-sleep-dark-mode';
+        const MONTHS = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+        const DAYS = ['lunes','martes','miercoles','jueves','viernes','sabado','domingo'];
+        const DAY_LABELS = ['Lun','Mar','Mie','Jue','Vie','Sab','Dom'];
+        const DAY_LABELS_FULL = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'];
+        const MOTIVOS = ['Hambre','Dolor','Ruido','Sueno','Panal','Otro'];
+        const CALIDADES = ['Buena','Regular','Mala'];
+
+        let appData = {
+            metadata: { babyName: '', createdAt: new Date().toISOString(), lastModified: new Date().toISOString() },
+            semanas: {},
+            psychologistNotes: ''
+        };
+        let currentWeekStart = null;
+        let currentDayIndex = 0;
+        let pendingImportData = null;
+        let charts = {};
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDarkMode();
+            loadData();
+            initSelectors();
+            buildDayTabs();
+            renderDayView();
+            updateWeekInfo();
+            initCharts();
+            updateDashboard();
+        });
+
+        function loadDarkMode() {
+            const dark = localStorage.getItem(DARK_MODE_KEY) === 'true';
+            if (dark) {
+                document.body.classList.add('dark-mode');
+                document.getElementById('darkModeBtn').innerHTML = '&#9788;';
+            }
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem(DARK_MODE_KEY, isDark);
+            document.getElementById('darkModeBtn').innerHTML = isDark ? '&#9788;' : '&#9789;';
+            if (charts.sleepHours) updateCharts();
+        }
+
+        function loadData() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) appData = JSON.parse(raw);
+            } catch (e) { console.error('Error loading:', e); }
+            document.getElementById('babyName').value = appData.metadata.babyName || '';
+            document.getElementById('psychologistNotes').value = appData.psychologistNotes || '';
+        }
+
+        function saveData() {
+            appData.metadata.lastModified = new Date().toISOString();
+            appData.metadata.babyName = document.getElementById('babyName').value;
+            appData.psychologistNotes = document.getElementById('psychologistNotes').value;
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(appData)); }
+            catch (e) { console.error('Error saving:', e); }
+        }
+
+        function saveBabyName() { saveData(); }
+
+        function getWeekNumber(date) {
+            const d = new Date(date);
+            d.setHours(0,0,0,0);
+            d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
+            const week1 = new Date(d.getFullYear(), 0, 4);
+            return 1 + Math.round(((d - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+        }
+
+        function getWeekStart(year, week) {
+            const jan1 = new Date(year, 0, 1);
+            const dayOfWeek = jan1.getDay();
+            return new Date(year, 0, 1 + (week - 1) * 7 - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+        }
+
+        function formatDate(date) {
+            const d = new Date(date);
+            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        }
+
+        function formatDisplayDate(date) {
+            const d = new Date(date);
+            return `${d.getDate()} ${MONTHS[d.getMonth()].substring(0,3)}`;
+        }
+
+        function formatWeekId(date) {
+            const d = new Date(date);
+            return `${d.getFullYear()}-W${String(getWeekNumber(d)).padStart(2,'0')}`;
+        }
+
+        function getWeekDays(startDate) {
+            const days = [];
+            const start = new Date(startDate);
+            for (let i = 0; i < 7; i++) {
+                const d = new Date(start);
+                d.setDate(d.getDate() + i);
+                days.push(d);
+            }
+            return days;
+        }
+
+        function initSelectors() {
+            const monthSelect = document.getElementById('monthSelect');
+            const yearSelect = document.getElementById('yearSelect');
+            MONTHS.forEach((month, i) => {
+                const opt = document.createElement('option');
+                opt.value = i;
+                opt.textContent = month;
+                monthSelect.appendChild(opt);
+            });
+            for (let y = 2024; y <= 2028; y++) {
+                const opt = document.createElement('option');
+                opt.value = y;
+                opt.textContent = y;
+                yearSelect.appendChild(opt);
+            }
+            const now = new Date();
+            monthSelect.value = now.getMonth();
+            yearSelect.value = now.getFullYear();
+            currentWeekStart = getWeekStart(now.getFullYear(), getWeekNumber(now));
+            currentDayIndex = (now.getDay() + 6) % 7;
+        }
+
+        function updateWeeks() { updateWeekInfo(); }
+
+        function updateWeekInfo() {
+            if (!currentWeekStart) return;
+            const weekNum = getWeekNumber(currentWeekStart);
+            const weekDays = getWeekDays(currentWeekStart);
+            const endDate = weekDays[6];
+            document.getElementById('weekInfo').innerHTML = `Semana ${weekNum} (${formatDisplayDate(currentWeekStart)} - ${formatDisplayDate(endDate)})`;
+            document.getElementById('monthSelect').value = currentWeekStart.getMonth();
+            document.getElementById('yearSelect').value = currentWeekStart.getFullYear();
+            buildDayTabs();
+        }
+
+        function prevWeek() {
+            currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+            syncSelectorsToWeek();
+            renderDayView();
+            updateWeekInfo();
+            updateDashboard();
+        }
+
+        function nextWeek() {
+            currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+            syncSelectorsToWeek();
+            renderDayView();
+            updateWeekInfo();
+            updateDashboard();
+        }
+
+        function syncSelectorsToWeek() {
+            document.getElementById('monthSelect').value = currentWeekStart.getMonth();
+            document.getElementById('yearSelect').value = currentWeekStart.getFullYear();
+        }
+
+        function onMonthYearChange() {
+            const month = parseInt(document.getElementById('monthSelect').value);
+            const year = parseInt(document.getElementById('yearSelect').value);
+            const weekNum = getWeekNumber(currentWeekStart);
+            currentWeekStart = getWeekStart(year, weekNum);
+            renderDayView();
+            updateWeekInfo();
+            updateDashboard();
+        }
+
+        function getWeekData() {
+            const weekId = formatWeekId(currentWeekStart);
+            if (!appData.semanas[weekId]) {
+                appData.semanas[weekId] = { notes: '', days: {} };
+            }
+            return appData.semanas[weekId];
+        }
+
+        function getDayData(dayIndex) {
+            const weekData = getWeekData();
+            const dayName = DAYS[dayIndex];
+            if (!weekData.days[dayName]) {
+                weekData.days[dayName] = { wakeUp: '', naps: [], nightWakings: [], notes: '' };
+            }
+            return weekData.days[dayName];
+        }
+
+        function buildDayTabs() {
+            const container = document.getElementById('dayTabs');
+            const weekDays = getWeekDays(currentWeekStart);
+            let html = '';
+            DAY_LABELS.forEach((label, i) => {
+                const date = weekDays[i];
+                const isActive = i === currentDayIndex ? 'active' : '';
+                html += `<button class="day-tab ${isActive}" onclick="selectDay(${i})">
+                    ${label}
+                    <span class="day-date">${date.getDate()}</span>
+                </button>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function selectDay(index) {
+            currentDayIndex = index;
+            buildDayTabs();
+            renderDayView();
+        }
+
+        function renderDayView() {
+            const container = document.getElementById('dailyCards');
+            const weekData = getWeekData();
+            document.getElementById('weekNotes').value = weekData.notes || '';
+            const d = getDayData(currentDayIndex);
+            const dayDate = getWeekDays(currentWeekStart)[currentDayIndex];
+            const dateStr = `${DAY_LABELS_FULL[currentDayIndex]} ${dayDate.getDate()} de ${MONTHS[dayDate.getMonth()]}`;
+
+            let html = '';
+
+            html += `<div class="card">
+                <div class="card-header">
+                    <span class="card-icon">&#9728;&#65039;</span>
+                    <h3>Despertar Matutino</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="form-label">Hora de despertar - ${dateStr}</label>
+                        <input type="time" class="time-input" value="${d.wakeUp||''}" onchange="updateWakeUp(${currentDayIndex},this.value)">
+                    </div>
+                </div>
+            </div>`;
+
+            html += `<div class="card">
+                <div class="card-header">
+                    <span class="card-icon">&#127769;</span>
+                    <h3>Siestas</h3>
+                </div>
+                <div class="card-body">`;
+
+            if (d.naps && d.naps.length > 0) {
+                d.naps.forEach((nap, idx) => {
+                    html += `<div class="entry-row">
+                        <label>Siesta ${idx+1}:</label>
+                        <input type="time" class="time-input" value="${nap.inicio||''}" onchange="updateNap(${currentDayIndex},${idx},'inicio',this.value)" placeholder="Inicio">
+                        <span style="color:var(--text-muted); font-weight:600;">&#8594;</span>
+                        <input type="time" class="time-input" value="${nap.fin||''}" onchange="updateNap(${currentDayIndex},${idx},'fin',this.value)" placeholder="Fin">
+                        <select class="select-input quality-${(nap.calidad||'Buena').toLowerCase()}" onchange="updateNapCalidad(${currentDayIndex},${idx},this.value);this.className='select-input quality-'+this.value.toLowerCase()">
+                            ${CALIDADES.map(c=>`<option value="${c}" ${nap.calidad===c?'selected':''}>${c}</option>`).join('')}
+                        </select>
+                        <button class="remove-btn" onclick="removeNap(${currentDayIndex},${idx})" title="Eliminar">&#10005;</button>
+                    </div>`;
+                });
+            } else {
+                html += `<div class="empty-state">
+                    <div class="empty-icon">&#128564;</div>
+                    <p>No hay siestas registradas</p>
+                </div>`;
+            }
+
+            html += `<button class="add-btn" onclick="addNap()">+ Agregar Siesta</button>
+                </div>
+            </div>`;
+
+            html += `<div class="card">
+                <div class="card-header">
+                    <span class="card-icon">&#127749;</span>
+                    <h3>Despertares Nocturnos</h3>
+                </div>
+                <div class="card-body">`;
+
+            if (d.nightWakings && d.nightWakings.length > 0) {
+                d.nightWakings.forEach((w, idx) => {
+                    html += `<div class="entry-row">
+                        <label>Despertar ${idx+1}:</label>
+                        <input type="time" class="time-input" value="${w.hora||''}" onchange="updateNightWaking(${currentDayIndex},${idx},'hora',this.value)">
+                        <input type="text" class="text-input" value="${w.duracion||''}" placeholder="min" onchange="updateNightWaking(${currentDayIndex},${idx},'duracion',this.value)">
+                        <select class="select-input" onchange="updateNightWaking(${currentDayIndex},${idx},'motivo',this.value)">
+                            ${MOTIVOS.map(m=>`<option value="${m}" ${w.motivo===m?'selected':''}>${m}</option>`).join('')}
+                        </select>
+                        <button class="remove-btn" onclick="removeNightWaking(${currentDayIndex},${idx})" title="Eliminar">&#10005;</button>
+                    </div>`;
+                });
+            } else {
+                html += `<div class="empty-state">
+                    <div class="empty-icon">&#127749;</div>
+                    <p>No hay despertares nocturnos</p>
+                </div>`;
+            }
+
+            html += `<button class="add-btn" onclick="addNightWaking()">+ Agregar Despertar Nocturno</button>
+                </div>
+            </div>`;
+
+            html += `<div class="card">
+                <div class="card-header">
+                    <span class="card-icon">&#128221;</span>
+                    <h3>Notas del D&#237;a</h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <textarea class="notes-input" placeholder="Observaciones del d&#237;a..." onchange="updateDayNotes(${currentDayIndex},this.value)">${d.notes||''}</textarea>
+                    </div>
+                </div>
+            </div>`;
+
+            html += `<div class="grid-footer">
+                <button class="btn btn-danger btn-sm" onclick="clearDay()">&#128465; Limpiar este D&#237;a</button>
+            </div>`;
+
+            container.innerHTML = html;
+        }
+
+        function updateWakeUp(i, v) { getDayData(i).wakeUp = v; saveData(); updateDashboard(); }
+        function updateNap(i, idx, field, v) {
+            const d = getDayData(i);
+            if (!d.naps[idx]) d.naps[idx] = { inicio: '', fin: '', calidad: 'Buena' };
+            d.naps[idx][field] = v;
+            saveData();
+            updateDashboard();
+        }
+        function updateNapCalidad(i, idx, v) {
+            const d = getDayData(i);
+            if (!d.naps[idx]) d.naps[idx] = { inicio: '', fin: '', calidad: 'Buena' };
+            d.naps[idx].calidad = v;
+            saveData();
+            updateDashboard();
+        }
+        function updateNightWaking(i, idx, field, v) {
+            const d = getDayData(i);
+            if (!d.nightWakings[idx]) d.nightWakings[idx] = { hora: '', duracion: '', motivo: 'Hambre' };
+            d.nightWakings[idx][field] = v;
+            saveData();
+            updateDashboard();
+        }
+        function updateDayNotes(i, v) { getDayData(i).notes = v; saveData(); }
+
+        function addNap() {
+            getDayData(currentDayIndex).naps.push({ inicio: '', fin: '', calidad: 'Buena' });
+            saveData();
+            renderDayView();
+        }
+
+        function removeNap(i, idx) {
+            getDayData(i).naps.splice(idx, 1);
+            saveData();
+            renderDayView();
+            updateDashboard();
+        }
+
+        function addNightWaking() {
+            getDayData(currentDayIndex).nightWakings.push({ hora: '', duracion: '', motivo: 'Hambre' });
+            saveData();
+            renderDayView();
+        }
+
+        function removeNightWaking(i, idx) {
+            getDayData(i).nightWakings.splice(idx, 1);
+            saveData();
+            renderDayView();
+            updateDashboard();
+        }
+
+        function clearDay() {
+            if (confirm('Limpiar todos los datos de este d\u00eda?')) {
+                const weekData = getWeekData();
+                const dayName = DAYS[currentDayIndex];
+                weekData.days[dayName] = { wakeUp: '', naps: [], nightWakings: [], notes: '' };
+                saveData();
+                renderDayView();
+                updateDashboard();
+            }
+        }
+
+        function clearWeek() {
+            if (confirm('Limpiar todos los datos de esta semana?')) {
+                delete appData.semanas[formatWeekId(currentWeekStart)];
+                saveData();
+                renderDayView();
+                updateDashboard();
+            }
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            if (tab === 'register') {
+                document.getElementById('registerTab').style.display = 'block';
+                document.getElementById('dashboardTab').classList.remove('active');
+                document.querySelectorAll('.tab')[0].classList.add('active');
+            } else {
+                document.getElementById('registerTab').style.display = 'none';
+                document.getElementById('dashboardTab').classList.add('active');
+                document.querySelectorAll('.tab')[1].classList.add('active');
+                updateDashboard();
+            }
+        }
+
+        function exportJSON() {
+            const name = appData.metadata.babyName || 'bebe';
+            const filename = `rutina-${name.toLowerCase().replace(/\s+/g,'-')}-${formatDate(new Date())}.json`;
+            const blob = new Blob([JSON.stringify(appData, null, 2)], { type: 'application/json' });
+            downloadBlob(blob, filename);
+        }
+
+        function exportCSV() {
+            const name = appData.metadata.babyName || 'bebe';
+            const filename = `rutina-${name.toLowerCase().replace(/\s+/g,'-')}-${formatDate(new Date())}.csv`;
+            let csv = '\uFEFF';
+            csv += 'Semana,Ano,Mes,Dia,Fecha,Despertar,Siesta 1 Inicio,Siesta 1 Fin,Siesta 1 Calidad,Siesta 2 Inicio,Siesta 2 Fin,Siesta 2 Calidad,Siesta 3 Inicio,Siesta 3 Fin,Siesta 3 Calidad,Total Siestas,Despertar Nocturno 1 Hora,Despertar Nocturno 1 Duracion,Despertar Nocturno 1 Motivo,Despertar Nocturno 2 Hora,Despertar Nocturno 2 Duracion,Despertar Nocturno 2 Motivo,Total Despertares Nocturnos,Notas Dia,Notas Semana,Observaciones Profesional\n';
+
+            Object.keys(appData.semanas).sort().forEach(weekId => {
+                const week = appData.semanas[weekId];
+                const parts = weekId.split('-W');
+                const year = parts[0];
+                const weekNum = parts[1];
+                const weekStart = getWeekStart(parseInt(year), parseInt(weekNum));
+
+                DAYS.forEach((day, i) => {
+                    const d = week.days[day] || { wakeUp: '', naps: [], nightWakings: [], notes: '' };
+                    const dayDate = new Date(weekStart);
+                    dayDate.setDate(dayDate.getDate() + i);
+                    const fecha = formatDate(dayDate);
+                    const mes = MONTHS[dayDate.getMonth()];
+
+                    const naps = d.naps || [];
+                    const nap1 = naps[0] || {};
+                    const nap2 = naps[1] || {};
+                    const nap3 = naps[2] || {};
+                    const totalNaps = naps.filter(n => n.inicio).length;
+
+                    const wakes = d.nightWakings || [];
+                    const wake1 = wakes[0] || {};
+                    const wake2 = wakes[1] || {};
+                    const totalWakes = wakes.filter(w => w.hora).length;
+
+                    const escCsv = (s) => `"${(s||'').replace(/"/g,'""')}"`;
+
+                    csv += `${weekId},${year},${mes},${DAY_LABELS_FULL[i]},${fecha},${d.wakeUp||''},`;
+                    csv += `${nap1.inicio||''},${nap1.fin||''},${nap1.calidad||''},`;
+                    csv += `${nap2.inicio||''},${nap2.fin||''},${nap2.calidad||''},`;
+                    csv += `${nap3.inicio||''},${nap3.fin||''},${nap3.calidad||''},`;
+                    csv += `${totalNaps},`;
+                    csv += `${wake1.hora||''},${wake1.duracion||''},${wake1.motivo||''},`;
+                    csv += `${wake2.hora||''},${wake2.duracion||''},${wake2.motivo||''},`;
+                    csv += `${totalWakes},`;
+                    csv += `${escCsv(d.notes)},${escCsv(week.notes||'')},${escCsv(appData.psychologistNotes||'')}\n`;
+                });
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            downloadBlob(blob, filename);
+        }
+
+        function downloadBlob(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        document.getElementById('importFile').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    pendingImportData = JSON.parse(e.target.result);
+                    document.getElementById('importModal').classList.add('active');
+                } catch (err) { alert('Error: ' + err.message); }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        });
+
+        function closeModal() {
+            document.getElementById('importModal').classList.remove('active');
+            pendingImportData = null;
+        }
+
+        function confirmImport() {
+            if (pendingImportData) {
+                appData = pendingImportData;
+                saveData();
+                renderDayView();
+                updateDashboard();
+                closeModal();
+                alert('Datos importados correctamente');
+            }
+        }
+
+        function updateDashboard() {
+            updateStats();
+            updateCharts();
+            updateSummaryTable();
+        }
+
+        function timeToMinutes(time) {
+            if (!time) return 0;
+            const [h, m] = time.split(':').map(Number);
+            return h * 60 + m;
+        }
+
+        function calculateStats() {
+            const weekData = getWeekData();
+            let totalSleepMinutes = 0, sleepDays = 0, totalNaps = 0, totalNightWakings = 0;
+            let qualityCount = { 'Buena': 0, 'Regular': 0, 'Mala': 0 };
+
+            DAYS.forEach(day => {
+                const d = weekData.days[day] || {};
+                if (d.wakeUp) {
+                    if (d.naps) {
+                        d.naps.forEach(nap => {
+                            if (nap.inicio && nap.fin) {
+                                const mins = timeToMinutes(nap.fin) - timeToMinutes(nap.inicio);
+                                if (mins > 0) {
+                                    totalSleepMinutes += mins;
+                                    totalNaps++;
+                                    if (nap.calidad) qualityCount[nap.calidad] = (qualityCount[nap.calidad]||0) + 1;
+                                }
+                            }
+                        });
+                    }
+                    sleepDays++;
+                }
+                if (d.nightWakings) totalNightWakings += d.nightWakings.filter(w => w.hora).length;
+            });
+
+            const avgSleepHours = sleepDays > 0 ? (totalSleepMinutes / 60 / sleepDays).toFixed(1) : '0';
+            const avgNapsPerDay = sleepDays > 0 ? (totalNaps / sleepDays).toFixed(1) : '0';
+            const avgNightWakings = sleepDays > 0 ? (totalNightWakings / sleepDays).toFixed(1) : '0';
+
+            let bestQuality = 'Sin datos', qualityPercent = 0;
+            const totalQuality = qualityCount['Buena'] + qualityCount['Regular'] + qualityCount['Mala'];
+            if (totalQuality > 0) {
+                if (qualityCount['Buena'] >= qualityCount['Regular'] && qualityCount['Buena'] >= qualityCount['Mala']) {
+                    bestQuality = 'Buena'; qualityPercent = Math.round(qualityCount['Buena'] / totalQuality * 100);
+                } else if (qualityCount['Regular'] >= qualityCount['Mala']) {
+                    bestQuality = 'Regular'; qualityPercent = Math.round(qualityCount['Regular'] / totalQuality * 100);
+                } else {
+                    bestQuality = 'Mala'; qualityPercent = Math.round(qualityCount['Mala'] / totalQuality * 100);
+                }
+            }
+
+            return { avgSleepHours, sleepChange: 0, totalNaps, avgNapsPerDay, avgNightWakings, wakingChange: 0, bestQuality, qualityPercent };
+        }
+
+        function updateStats() {
+            const stats = calculateStats();
+            document.getElementById('statsGrid').innerHTML = `
+                <div class="stat-card"><div class="stat-icon">&#128164;</div><div class="stat-value">${stats.avgSleepHours}h</div><div class="stat-label">Promedio Sue&#241;o Nocturno</div></div>
+                <div class="stat-card"><div class="stat-icon">&#128564;</div><div class="stat-value">${stats.totalNaps}</div><div class="stat-label">Total Siestas Semana</div><div class="stat-change neutral">Promedio ${stats.avgNapsPerDay}/d&#237;a</div></div>
+                <div class="stat-card"><div class="stat-icon">&#127749;</div><div class="stat-value">${stats.avgNightWakings}</div><div class="stat-label">Despertares Nocturnos/D&#237;a</div></div>
+                <div class="stat-card"><div class="stat-icon">&#127919;</div><div class="stat-value">${stats.bestQuality}</div><div class="stat-label">Calidad Predominante</div><div class="stat-change neutral">${stats.qualityPercent}% de los d&#237;as</div></div>
+            `;
+        }
+
+        function initCharts() {
+            const textColor = document.body.classList.contains('dark-mode') ? '#c4b5fd' : '#6b5b7b';
+            const gridColor = document.body.classList.contains('dark-mode') ? '#4c3d8f' : '#e9d5ff';
+
+            charts.sleepHours = new Chart(document.getElementById('sleepHoursChart').getContext('2d'), {
+                type: 'line',
+                data: { labels: ['Sem -3','Sem -2','Sem -1','Actual'], datasets: [{ label: 'Horas', data: [0,0,0,0], borderColor: '#a78bfa', backgroundColor: 'rgba(167, 139, 250, 0.15)', fill: true, tension: 0.4, pointBackgroundColor: '#a78bfa', pointBorderColor: '#fff', pointBorderWidth: 2 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 14, ticks: { color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor }, grid: { color: gridColor } } } }
+            });
+
+            charts.naps = new Chart(document.getElementById('napsChart').getContext('2d'), {
+                type: 'bar',
+                data: { labels: DAY_LABELS, datasets: [{ label: 'Siestas', data: [0,0,0,0,0,0,0], backgroundColor: ['#f9a8d4','#c4b5fd','#93c5fd','#6ee7b7','#fdba74','#fda4af','#a78bfa'], borderRadius: 8 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1, color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor }, grid: { color: gridColor } } } }
+            });
+
+            charts.wakings = new Chart(document.getElementById('wakingsChart').getContext('2d'), {
+                type: 'line',
+                data: { labels: ['Sem -3','Sem -2','Sem -1','Actual'], datasets: [{ label: 'Despertares', data: [0,0,0,0], borderColor: '#fdba74', backgroundColor: 'rgba(253, 186, 116, 0.15)', fill: true, tension: 0.4, pointBackgroundColor: '#fdba74', pointBorderColor: '#fff', pointBorderWidth: 2 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { color: textColor }, grid: { color: gridColor } }, x: { ticks: { color: textColor }, grid: { color: gridColor } } } }
+            });
+
+            charts.quality = new Chart(document.getElementById('qualityChart').getContext('2d'), {
+                type: 'doughnut',
+                data: { labels: ['Buena','Regular','Mala'], datasets: [{ data: [33,33,34], backgroundColor: ['#6ee7b7','#fcd34d','#fca5a5'], borderWidth: 0, borderRadius: 4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: textColor, padding: 16 } } } }
+            });
+        }
+
+        function updateCharts() {
+            const weekData = getWeekData();
+
+            const napsPerDay = DAYS.map(day => (weekData.days[day]?.naps || []).filter(n => n.inicio).length);
+            charts.naps.data.datasets[0].data = napsPerDay;
+            charts.naps.update();
+
+            let totalSleepMinutes = 0;
+            DAYS.forEach(day => {
+                (weekData.days[day]?.naps || []).forEach(nap => {
+                    if (nap.inicio && nap.fin) {
+                        const mins = timeToMinutes(nap.fin) - timeToMinutes(nap.inicio);
+                        if (mins > 0) totalSleepMinutes += mins;
+                    }
+                });
+            });
+            charts.sleepHours.data.datasets[0].data[3] = parseFloat((totalSleepMinutes / 60 / 7).toFixed(1));
+            charts.sleepHours.update();
+
+            let totalWakings = 0;
+            DAYS.forEach(day => { totalWakings += (weekData.days[day]?.nightWakings || []).filter(w => w.hora).length; });
+            charts.wakings.data.datasets[0].data[3] = parseFloat((totalWakings / 7).toFixed(1));
+            charts.wakings.update();
+
+            let qc = { 'Buena': 0, 'Regular': 0, 'Mala': 0 };
+            DAYS.forEach(day => { (weekData.days[day]?.naps || []).forEach(n => { if (n.calidad) qc[n.calidad] = (qc[n.calidad]||0) + 1; }); });
+            const tq = qc['Buena'] + qc['Regular'] + qc['Mala'];
+            if (tq > 0) {
+                charts.quality.data.datasets[0].data = [Math.round(qc['Buena']/tq*100), Math.round(qc['Regular']/tq*100), Math.round(qc['Mala']/tq*100)];
+            } else {
+                charts.quality.data.datasets[0].data = [33, 33, 34];
+            }
+            charts.quality.update();
+        }
+
+        function updateSummaryTable() {
+            const weekData = getWeekData();
+            let html = '';
+            DAYS.forEach((day, i) => {
+                const d = weekData.days[day] || {};
+                const napCount = (d.naps || []).filter(n => n.inicio).length;
+                const wakingCount = (d.nightWakings || []).filter(w => w.hora).length;
+                let totalNapMinutes = 0;
+                (d.naps || []).forEach(nap => {
+                    if (nap.inicio && nap.fin) {
+                        const mins = timeToMinutes(nap.fin) - timeToMinutes(nap.inicio);
+                        if (mins > 0) totalNapMinutes += mins;
+                    }
+                });
+                const qualities = (d.naps || []).map(n => n.calidad).filter(Boolean);
+                const mainQuality = qualities.length > 0 ? qualities.sort((a,b) => qualities.filter(v => v===b).length - qualities.filter(v => v===a).length)[0] : '-';
+                const qualityClass = mainQuality !== '-' ? `quality-${mainQuality.toLowerCase()}` : '';
+                html += `<tr><td><strong>${DAY_LABELS[i]}</strong></td><td>${d.wakeUp||'-'}</td><td>${napCount}</td><td>${(totalNapMinutes/60).toFixed(1)}h</td><td>${wakingCount}</td><td><span class="${qualityClass}">${mainQuality}</span></td></tr>`;
+            });
+            document.getElementById('summaryBody').innerHTML = html;
+        }
+
+        document.getElementById('monthSelect').addEventListener('change', onMonthYearChange);
+        document.getElementById('yearSelect').addEventListener('change', onMonthYearChange);
+
+        // Service Worker Registration for PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => {
+                        console.log('Service Worker registrado:', reg.scope);
+                    })
+                    .catch(err => {
+                        console.log('Service Worker no disponible (necesita HTTPS o localhost)');
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Generador de Iconos PWA</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f5f5f5; }
+        h1 { color: #8b5cf6; }
+        .info { margin: 10px 0; padding: 10px; background: #e0e7ff; border-radius: 8px; }
+        canvas { border: 1px solid #ccc; margin: 5px; }
+        .grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        button { 
+            padding: 12px 24px; 
+            background: #8b5cf6; 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover { background: #7c3aed; }
+    </style>
+</head>
+<body>
+    <h1>Generador de Iconos - Sueño Baby</h1>
+    <div class="info">
+        <p>Haz clic en "Generar Iconos" y luego en cada imagen para descargarla.</p>
+        <p>Guarda los archivos en la carpeta <strong>icons/</strong> del proyecto.</p>
+    </div>
+    <button onclick="generateAll()">Generar Iconos</button>
+    <button onclick="downloadAll()">Descargar Todos</button>
+    <div class="grid" id="icons"></div>
+
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        
+        function drawIcon(canvas, size) {
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Background gradient
+            const bgGrad = ctx.createLinearGradient(0, 0, size, size);
+            bgGrad.addColorStop(0, '#fdf2f8');
+            bgGrad.addColorStop(1, '#ede9fe');
+            
+            // Rounded rectangle
+            const radius = size * 0.18;
+            ctx.beginPath();
+            ctx.moveTo(radius, 0);
+            ctx.lineTo(size - radius, 0);
+            ctx.quadraticCurveTo(size, 0, size, radius);
+            ctx.lineTo(size, size - radius);
+            ctx.quadraticCurveTo(size, size, size - radius, size);
+            ctx.lineTo(radius, size);
+            ctx.quadraticCurveTo(0, size, 0, size - radius);
+            ctx.lineTo(0, radius);
+            ctx.quadraticCurveTo(0, 0, radius, 0);
+            ctx.closePath();
+            ctx.fillStyle = bgGrad;
+            ctx.fill();
+            
+            // Moon gradient
+            const moonGrad = ctx.createLinearGradient(
+                size * 0.25, size * 0.2, 
+                size * 0.75, size * 0.75
+            );
+            moonGrad.addColorStop(0, '#a78bfa');
+            moonGrad.addColorStop(1, '#8b5cf6');
+            
+            // Draw moon
+            const moonSize = size * 0.47;
+            const moonX = size * 0.5 - moonSize * 0.5;
+            const moonY = size * 0.47 - moonSize * 0.5;
+            
+            ctx.beginPath();
+            ctx.arc(moonX + moonSize/2, moonY + moonSize/2, moonSize/2, 0, Math.PI * 2);
+            ctx.fillStyle = moonGrad;
+            ctx.fill();
+            
+            // Cut out for crescent
+            ctx.beginPath();
+            ctx.arc(
+                moonX + moonSize * 0.65, 
+                moonY + moonSize * 0.35, 
+                moonSize * 0.33, 
+                0, Math.PI * 2
+            );
+            ctx.fillStyle = '#fdf2f8';
+            ctx.fill();
+            
+            // Stars
+            const starPositions = [
+                { x: 0.35, y: 0.31, size: 0.023, color: '#c4b5fd' },
+                { x: 0.66, y: 0.63, size: 0.018, color: '#f9a8d4' },
+                { x: 0.31, y: 0.66, size: 0.020, color: '#93c5fd' },
+                { x: 0.72, y: 0.28, size: 0.015, color: '#c4b5fd' },
+                { x: 0.25, y: 0.45, size: 0.012, color: '#f9a8d4' }
+            ];
+            
+            starPositions.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(
+                    size * star.x, 
+                    size * star.y, 
+                    size * star.size, 
+                    0, Math.PI * 2
+                );
+                ctx.fillStyle = star.color;
+                ctx.fill();
+            });
+            
+            // Text "Sueño"
+            ctx.fillStyle = '#8b5cf6';
+            ctx.font = `bold ${size * 0.09}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.fillText('Sueño', size * 0.5, size * 0.86);
+            
+            // Text "Baby"
+            ctx.fillStyle = '#a78bfa';
+            ctx.font = `${size * 0.055}px Arial`;
+            ctx.fillText('Baby', size * 0.5, size * 0.93);
+        }
+        
+        function generateAll() {
+            const container = document.getElementById('icons');
+            container.innerHTML = '';
+            
+            sizes.forEach(size => {
+                const wrapper = document.createElement('div');
+                wrapper.style.textAlign = 'center';
+                
+                const canvas = document.createElement('canvas');
+                canvas.style.cursor = 'pointer';
+                canvas.title = `Click para descargar icon-${size}.png`;
+                canvas.onclick = () => downloadIcon(canvas, size);
+                
+                const label = document.createElement('div');
+                label.textContent = `${size}x${size}`;
+                label.style.fontSize = '12px';
+                label.style.marginTop = '4px';
+                
+                drawIcon(canvas, size);
+                wrapper.appendChild(canvas);
+                wrapper.appendChild(label);
+                container.appendChild(wrapper);
+            });
+        }
+        
+        function downloadIcon(canvas, size) {
+            const link = document.createElement('a');
+            link.download = `icon-${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+        
+        function downloadAll() {
+            sizes.forEach((size, i) => {
+                setTimeout(() => {
+                    const canvas = document.createElement('canvas');
+                    drawIcon(canvas, size);
+                    downloadIcon(canvas, size);
+                }, i * 300);
+            });
+        }
+        
+        generateAll();
+    </script>
+</body>
+</html>

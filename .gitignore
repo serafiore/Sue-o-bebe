@@ -1,0 +1,17 @@
+# Archivos de sistema
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# Archivos de desarrollo
+*.ps1
+*.tmp
+*.log
+node_modules/
+
+# Archivos de ejemplo (no necesarios para la app)
+ejemplo-analisis.json
+skills-lock.json
+
+# Carpeta baby-sleep-tracker (proyecto React descartado)
+baby-sleep-tracker/

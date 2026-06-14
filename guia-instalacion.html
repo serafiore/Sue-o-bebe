@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Instalacion - Sueño Baby</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fdf2f8 0%, #ede9fe 100%);
+            color: #4a3462;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 32px;
+            background: linear-gradient(135deg, #a78bfa, #f9a8d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #6b5b7b;
+            font-size: 16px;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 16px rgba(167, 139, 250, 0.12);
+            border: 1px solid #e9d5ff;
+        }
+        .card h2 {
+            font-size: 20px;
+            color: #8b5cf6;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card h2 .icon {
+            font-size: 28px;
+        }
+        .step {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: #f5f3ff;
+            border-radius: 12px;
+        }
+        .step-num {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .step-content h3 {
+            font-size: 16px;
+            color: #4a3462;
+            margin-bottom: 4px;
+        }
+        .step-content p {
+            color: #6b5b7b;
+            font-size: 14px;
+        }
+        .tip {
+            background: #d1fae5;
+            border: 1px solid #6ee7b7;
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 16px;
+        }
+        .tip strong {
+            color: #065f46;
+        }
+        .tip p {
+            color: #047857;
+            font-size: 13px;
+        }
+        .warning {
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 16px;
+        }
+        .warning strong {
+            color: #92400e;
+        }
+        .warning p {
+            color: #b45309;
+            font-size: 13px;
+        }
+        .download-btn {
+            display: inline-block;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 10px 5px;
+            transition: all 0.25s ease;
+        }
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(167, 139, 250, 0.3);
+        }
+        .file-list {
+            background: #f5f3ff;
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 12px;
+        }
+        .file-list h4 {
+            color: #8b5cf6;
+            margin-bottom: 8px;
+        }
+        .file-list ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .file-list li {
+            padding: 6px 0;
+            border-bottom: 1px solid #e9d5ff;
+            font-size: 14px;
+        }
+        .file-list li:last-child {
+            border-bottom: none;
+        }
+        .file-list code {
+            background: #ede9fe;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+        .qr-placeholder {
+            text-align: center;
+            padding: 30px;
+            background: #f5f3ff;
+            border-radius: 12px;
+            margin: 16px 0;
+        }
+        .qr-placeholder p {
+            color: #6b5b7b;
+            font-size: 14px;
+        }
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #9b8aad;
+            font-size: 13px;
+        }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 24px; }
+            .card { padding: 16px; }
+            .step { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sueno Baby</h1>
+            <p>Guia para instalar la app en tu celular o computadora</p>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">&#128230;</span> Paso 1: Descargar los archivos</h2>
+            <p>Necesitas estos archivos para usar la app:</p>
+            <div class="file-list">
+                <h4>Archivos necesarios:</h4>
+                <ul>
+                    <li><code>rutina-sueno.html</code> - La app principal</li>
+                    <li><code>sw.js</code> - Service Worker (para funcionar sin internet)</li>
+                    <li><code>manifest.json</code> - Configuracion de la app</li>
+                    <li><code>icons/</code> - Carpeta con los iconos de la app</li>
+                </ul>
+            </div>
+            <div class="warning">
+                <strong>&#9888; Importante:</strong>
+                <p>Todos los archivos deben estar en la misma carpeta para que la app funcione correctamente.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">&#128241;</span> Instalar en Android</h2>
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Abrir en Chrome</h3>
+                    <p>Abre el archivo <code>rutina-sueno.html</code> en Google Chrome desde tu celular.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Tocar los tres puntos</h3>
+                    <p>Toca el menu (tres puntos verticales) en la esquina superior derecha.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Seleccionar "Instalar app"</h3>
+                    <p>Busca y toca la opcion "Instalar app" o "Agregar a pantalla de inicio".</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <h3>Confirmar</h3>
+                    <p>Toca "Instalar" en la ventana que aparece. La app aparecera en tu pantalla de inicio.</p>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>&#128161; Tip:</strong>
+                <p>Si no ves la opcion "Instalar app", asegurate de que el archivo este abierto en Chrome y no en otro navegador.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">&#129309;</span> Instalar en iPhone / iPad</h2>
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Abrir en Safari</h3>
+                    <p>Abre el archivo <code>rutina-sueno.html</code> en Safari desde tu iPhone o iPad.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Tocar el boton de compartir</h3>
+                    <p>Toca el boton de compartir (cuadro con flecha hacia arriba) en la barra inferior.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Seleccionar "Agregar a pantalla de inicio"</h3>
+                    <p>Desliza hacia abajo y toca "Agregar a pantalla de inicio".</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <h3>Confirmar</h3>
+                    <p>Toca "Agregar" en la esquina superior derecha. La app aparecera en tu pantalla de inicio.</p>
+                </div>
+            </div>
+            <div class="warning">
+                <strong>&#9888; Nota para iOS:</strong>
+                <p>En iPhone, la app funciona como un acceso directo. Los datos se guardan en el navegador y persisten entre sesiones.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">&#128187;</span> Instalar en Windows</h2>
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Abrir en Chrome o Edge</h3>
+                    <p>Abre el archivo <code>rutina-sueno.html</code> en Google Chrome o Microsoft Edge.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Instalar como app</h3>
+                    <p>En Chrome: Toca los tres puntos &gt; "Instalar app".<br>
+                    En Edge: Toca los tres puntos &gt; "Aplicaciones" &gt; "Instalar esta sitio como app".</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Confirmar</h3>
+                    <p>Toca "Instalar". La app se abrira en su propia ventana y puedes fijarla en la barra de tareas.</p>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>&#128161; Tip:</strong>
+                <p>Tambien puedes crear un acceso directo: arrastra el icono de la pagina al escritorio.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">&#128279;</span> Compartir con otras madres</h2>
+            <p>Para compartir la app con otras madres:</p>
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Opcion A: Por WhatsApp</h3>
+                    <p>Envia todos los archivos por WhatsApp. La destinataria debe guardarlos en una carpeta y abrir <code>rutina-sueno.html</code> en su navegador.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Opcion B: Por correo</h3>
+                    <p>Envia los archivos como adjuntos. La destinataria los descarga, los guarda en una carpeta y abre el HTML.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Opcion C: Subir a la nube</h3>
+                    <p>Sube los archivos a Google Drive, OneDrive o Dropbox y comparte el enlace. La destinataria puede descargarlos desde ahi.</p>
+                </div>
+            </div>
+            <div class="tip">
+                <strong>&#128161; Recomendacion:</strong>
+                <p>Lo mas facil es enviar los archivos por WhatsApp y explicar que deben abrir el HTML en Chrome para instalarlo.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">&#128190;</span> Exportar e importar datos</h2>
+            <p>Para compartir datos con un psicologo o entre dispositivos:</p>
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Exportar JSON</h3>
+                    <p>Toca el boton "JSON" en la app. Se descargara un archivo con todos los datos.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Enviar el archivo</h3>
+                    <p>Envia el archivo JSON por WhatsApp o correo al psicologo.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Importar en otro dispositivo</h3>
+                    <p>En el nuevo dispositivo, toca "Importar" y selecciona el archivo JSON. Los datos se cargaran automaticamente.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2><span class="icon">&#10060;</span> Solucion de problemas</h2>
+            <div class="step">
+                <div class="step-content">
+                    <h3>La app no se instala</h3>
+                    <p>Asegurate de estar usando Chrome (Android) o Safari (iPhone). No funciona en otros navegadores.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h3>Los datos no se guardan</h3>
+                    <p>Los datos se guardan en el navegador. Si borras el historial, se perderan. Usa la funcion Exportar JSON como respaldo.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-content">
+                    <h3>La app no carga los graficos</h3>
+                    <p>Necesita conexion a internet la primera vez para cargar Chart.js. Despues funciona offline.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Sueno Baby - Seguimiento de sueno para tu bebe</p>
+        </div>
+    </div>
+</body>
+</html>

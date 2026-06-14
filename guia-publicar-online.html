@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Como Publicar Sueño Baby Online</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #fdf2f8 0%, #ede9fe 100%);
+            color: #4a3462;
+            line-height: 1.7;
+            padding: 20px;
+        }
+        .container { max-width: 850px; margin: 0 auto; }
+        .header {
+            text-align: center;
+            padding: 50px 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 36px;
+            background: linear-gradient(135deg, #a78bfa, #f9a8d4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+        }
+        .header p { color: #6b5b7b; font-size: 18px; }
+        .result-box {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border: 2px solid #6ee7b7;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .result-box h2 { color: #065f46; margin-bottom: 8px; }
+        .result-box p { color: #047857; font-size: 15px; }
+        .result-box .link-example {
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: bold;
+            color: #8b5cf6;
+            margin-top: 12px;
+            padding: 12px 20px;
+            background: white;
+            border-radius: 8px;
+            display: inline-block;
+        }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(167, 139, 250, 0.12);
+            border: 1px solid #e9d5ff;
+        }
+        .card h2 {
+            font-size: 22px;
+            color: #8b5cf6;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #ede9fe;
+        }
+        .card h2 .icon { font-size: 32px; }
+        .card h2 .badge {
+            background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+            color: white;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-left: auto;
+        }
+        .step {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 18px;
+            padding: 18px;
+            background: #f5f3ff;
+            border-radius: 12px;
+            border-left: 4px solid #a78bfa;
+        }
+        .step-num {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .step-content h3 {
+            font-size: 17px;
+            color: #4a3462;
+            margin-bottom: 6px;
+        }
+        .step-content p {
+            color: #6b5b7b;
+            font-size: 14px;
+        }
+        .step-content code {
+            background: #ede9fe;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #8b5cf6;
+        }
+        .tip {
+            background: #d1fae5;
+            border: 1px solid #6ee7b7;
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+        .tip strong { color: #065f46; }
+        .tip p { color: #047857; font-size: 13px; }
+        .warning {
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 10px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+        .warning strong { color: #92400e; }
+        .warning p { color: #b45309; font-size: 13px; }
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .platform-card {
+            background: #f5f3ff;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            border: 2px solid #e9d5ff;
+        }
+        .platform-card .platform-icon { font-size: 40px; margin-bottom: 10px; }
+        .platform-card h4 { color: #8b5cf6; margin-bottom: 8px; }
+        .platform-card p { color: #6b5b7b; font-size: 13px; }
+        .file-list {
+            background: #f5f3ff;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+        .file-list h4 { color: #8b5cf6; margin-bottom: 8px; font-size: 15px; }
+        .file-list ul { list-style: none; padding: 0; }
+        .file-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #e9d5ff;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .file-list li:last-child { border-bottom: none; }
+        .file-list .file-icon { font-size: 16px; }
+        .checklist {
+            background: #f5f3ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 16px;
+        }
+        .checklist h4 { color: #8b5cf6; margin-bottom: 12px; }
+        .checklist label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .checklist input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #8b5cf6;
+        }
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #9b8aad;
+            font-size: 14px;
+        }
+        @media (max-width: 600px) {
+            .header h1 { font-size: 26px; }
+            .card { padding: 18px; }
+            .step { flex-direction: column; gap: 10px; }
+            .platform-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Como Publicar Sueño Baby Online</h1>
+            <p>Guia paso a paso para tener tu app en un link</p>
+        </div>
+
+        <div class="result-box">
+            <h2>Lo que vas a lograr</h2>
+            <p>Tu app accesible desde cualquier celular o computadora</p>
+            <div class="link-example">https://tuusuario.github.io/sueno-baby/</div>
+        </div>
+
+        <!-- PARTE 1 -->
+        <div class="card">
+            <h2>
+                <span class="icon">&#128100;</span>
+                Paso 1: Crear cuenta en GitHub
+                <span class="badge">5 min</span>
+            </h2>
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Ir a GitHub</h3>
+                    <p>Abri <strong>https://github.com</strong> en tu navegador</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Crear cuenta</h3>
+                    <p>Toca <strong>"Sign up"</strong> y completa tu email, contrasena y un nombre de usuario. Este nombre sera parte de tu link.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Verificar tu email</h3>
+                    <p>Revisa tu correo y toca el link de verificacion que te envio GitHub.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PARTE 2 -->
+        <div class="card">
+            <h2>
+                <span class="icon">&#128230;</span>
+                Paso 2: Crear el repositorio
+                <span class="badge">3 min</span>
+            </h2>
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Crear nuevo repositorio</h3>
+                    <p>Toca el boton <strong>"+"</strong> arriba a la derecha y selecciona <strong>"New repository"</strong></p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Configurar</h3>
+                    <p>Completa asi:</p>
+                    <ul style="margin-top:8px; padding-left:20px; font-size:14px; color:#6b5b7b;">
+                        <li><strong>Repository name:</strong> <code>sueno-baby</code></li>
+                        <li><strong>Description:</strong> App de seguimiento de sueno</li>
+                        <li>Selecciona <strong>"Public"</strong></li>
+                        <li>Marca <strong>"Add a README file"</strong></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Crear</h3>
+                    <p>Toca el boton verde <strong>"Create repository"</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PARTE 3 -->
+        <div class="card">
+            <h2>
+                <span class="icon">&#128228;</span>
+                Paso 3: Subir los archivos
+                <span class="badge">10 min</span>
+            </h2>
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Subir archivos principales</h3>
+                    <p>En tu repositorio toca <strong>"Add file"</strong> > <strong>"Upload files"</strong></p>
+                </div>
+            </div>
+            <div class="file-list">
+                <h4>Arrastra estos archivos:</h4>
+                <ul>
+                    <li><span class="file-icon">&#128196;</span> <code>rutina-sueno.html</code> - La app principal</li>
+                    <li><span class="file-icon">&#9889;</span> <code>sw.js</code> - Service Worker</li>
+                    <li><span class="file-icon">&#128196;</span> <code>manifest.json</code> - Configuracion PWA</li>
+                    <li><span class="file-icon">&#128214;</span> <code>guia-instalacion.html</code> - Guia para madres</li>
+                </ul>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Confirmar subida</h3>
+                    <p>Toca <strong>"Commit changes"</strong></p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Crear carpeta de iconos</h3>
+                    <p>Toca <strong>"Add file"</strong> > <strong>"Create new file"</strong></p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <h3>Subir iconos uno por uno</h3>
+                    <p>En el campo del nombre escribe <code>icons/icon-192.png</code>, toca "choose your files", sube el archivo, y toca "Commit changes". Repite para:</p>
+                </div>
+            </div>
+            <div class="file-list">
+                <h4>Iconos a subir:</h4>
+                <ul>
+                    <li><span class="file-icon">&#127775;</span> <code>icons/icon-72.png</code></li>
+                    <li><span class="file-icon">&#127775;</span> <code>icons/icon-96.png</code></li>
+                    <li><span class="file-icon">&#127775;</span> <code>icons/icon-128.png</code></li>
+                    <li><span class="file-icon">&#127775;</span> <code>icons/icon-144.png</code></li>
+                    <li><span class="file-icon">&#127775;</span> <code>icons/icon-152.png</code></li>
+                    <li><span class="file-icon">&#127775;</span> <code>icons/icon-192.png</code></li>
+                    <li><span class="file-icon">&#127775;</span> <code>icons/icon-384.png</code></li>
+                    <li><span class="file-icon">&#127775;</span> <code>icons/icon-512.png</code></li>
+                </ul>
+            </div>
+            <div class="tip">
+                <strong>&#128161; Tip:</strong>
+                <p>Tarda un poco pero es el metodo mas simple. Si queres rapido, instala Git en tu computadora.</p>
+            </div>
+        </div>
+
+        <!-- PARTE 4 -->
+        <div class="card">
+            <h2>
+                <span class="icon">&#127760;</span>
+                Paso 4: Activar GitHub Pages
+                <span class="badge">2 min</span>
+            </h2>
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Ir a Settings</h3>
+                    <p>En tu repositorio, toca la pestana <strong>"Settings"</strong> (arriba)</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Ir a Pages</h3>
+                    <p>En el menu izquierdo, toca <strong>"Pages"</strong></p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Configurar source</h3>
+                    <p>En <strong>"Source"</strong> selecciona:<br>
+                    - <strong>Branch:</strong> <code>main</code><br>
+                    - <strong>Folder:</strong> <code>/ (root)</code><br>
+                    Toca <strong>"Save"</strong></p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <h3>Esperar y copiar link</h3>
+                    <p>Espera 1-2 minutos, recarga la pagina. Veras un mensaje verde con tu link. Copialo.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PARTE 5 -->
+        <div class="card">
+            <h2>
+                <span class="icon">&#128241;</span>
+                Paso 5: Guardar como app
+            </h2>
+            <p style="margin-bottom:16px;">Comparti el link con las madres y que sigan estos pasos:</p>
+            <div class="platform-grid">
+                <div class="platform-card">
+                    <div class="platform-icon">&#128241;</div>
+                    <h4>Android</h4>
+                    <p>Abrir en <strong>Chrome</strong> &gt; Tocar tres puntos &gt; <strong>"Instalar app"</strong> &gt; Confirmar</p>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-icon">&#129309;</div>
+                    <h4>iPhone</h4>
+                    <p>Abrir en <strong>Safari</strong> &gt; Tocar compartir &#9650; &gt; <strong>"Agregar a pantalla"</strong> &gt; Confirmar</p>
+                </div>
+                <div class="platform-card">
+                    <div class="platform-icon">&#128187;</div>
+                    <h4>Windows</h4>
+                    <p>Abrir en <strong>Chrome/Edge</strong> &gt; Menu &gt; <strong>"Instalar app"</strong> &gt; Fijar en barra</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHECKLIST -->
+        <div class="card">
+            <h2>
+                <span class="icon">&#9989;</span>
+                Checklist de verificacion
+            </h2>
+            <div class="checklist">
+                <h4>Marca cada paso cuando lo completes:</h4>
+                <label><input type="checkbox"> Cuenta creada en GitHub</label>
+                <label><input type="checkbox"> Repositorio <code>sueno-baby</code> creado (Public)</label>
+                <label><input type="checkbox"> Archivos principales subidos (HTML, JS, JSON)</label>
+                <label><input type="checkbox"> Carpeta <code>icons/</code> creada con los 8 PNG</label>
+                <label><input type="checkbox"> GitHub Pages activado desde <code>main</code></label>
+                <label><input type="checkbox"> Link funcionando (se abre la app)</label>
+                <label><input type="checkbox"> Probado en celular (se puede guardar como app)</label>
+            </div>
+        </div>
+
+        <!-- MENSAJE PARA COMPARTIR -->
+        <div class="card">
+            <h2>
+                <span class="icon">&#128172;</span>
+                Mensaje para compartir
+            </h2>
+            <p>Copia y envia este mensaje por WhatsApp:</p>
+            <div style="background:#f5f3ff; border-radius:12px; padding:20px; margin-top:12px; font-size:14px; color:#4a3462; border: 2px dashed #c4b5fd;">
+                <p>Hola! Te comparto la app para trackear el sueno del bebe:</p>
+                <p style="font-weight:bold; color:#8b5cf6; margin:12px 0; font-size:16px;">https://tuusuario.github.io/sueno-baby/</p>
+                <p>Para guardarla como app en tu celular:</p>
+                <p>&#8226; <strong>Android:</strong> Abri en Chrome, toca los 3 puntos y "Instalar app"</p>
+                <p>&#8226; <strong>iPhone:</strong> Abri en Safari, toca compartir y "Agregar a pantalla de inicio"</p>
+                <p style="margin-top:12px; font-size:13px; color:#6b5b7b;">Los datos se guardan en tu celular. Podes exportarlos como JSON para mandarlos al psicologo.</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Sueno Baby - App de seguimiento de sueno para bebes</p>
+        </div>
+    </div>
+</body>
+</html>
