@@ -882,6 +882,185 @@
             font-size: 14px;
         }
 
+        /* Mood Selector */
+        .mood-selector {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .mood-btn {
+            width: 42px;
+            height: 42px;
+            border: 2px solid var(--border-input);
+            background: var(--bg-input);
+            border-radius: var(--radius-xs);
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mood-btn:hover { border-color: var(--primary); transform: scale(1.1); }
+        .mood-btn.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, var(--lavender-light), var(--pink-light));
+            box-shadow: 0 2px 8px rgba(167,139,250,0.3);
+            transform: scale(1.1);
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .form-grid .form-group { margin-bottom: 0; }
+        .form-grid .full-width { grid-column: 1 / -1; }
+
+        /* Short text input */
+        .short-text-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid var(--border-input);
+            border-radius: var(--radius-xs);
+            font-size: 14px;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            transition: all 0.25s ease;
+        }
+        .short-text-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(167,139,250,0.15);
+        }
+
+        /* Toggle Switch */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider {
+            position: absolute;
+            inset: 0;
+            background: var(--border-input);
+            border-radius: 26px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        .toggle-switch input:checked + .toggle-slider {
+            background: linear-gradient(135deg, var(--primary), var(--pink));
+        }
+        .toggle-switch input:checked + .toggle-slider::before {
+            transform: translateX(22px);
+        }
+        .toggle-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Milk Timeline */
+        .milk-timeline {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        .milk-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #fef3c7, #ffedd5);
+            border: 1px solid #fcd34d;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #92400e;
+        }
+        .dark-mode .milk-chip {
+            background: linear-gradient(135deg, #78350f, #92400e);
+            border-color: #b45309;
+            color: #fcd34d;
+        }
+        .milk-chip .remove-milk {
+            width: 18px;
+            height: 18px;
+            border: none;
+            background: rgba(239,68,68,0.2);
+            color: #e11d48;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .milk-chip .remove-milk:hover {
+            background: #e11d48;
+            color: white;
+        }
+
+        /* Nap Detail Card */
+        .nap-detail {
+            background: var(--bg-section);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .nap-detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .nap-detail-header h4 {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* Night Detail Card */
+        .night-detail {
+            background: var(--bg-section);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .night-detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .night-detail-header h4 {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .container { padding: 12px; }
@@ -896,6 +1075,8 @@
             .card-body { padding: 16px; }
             .entry-row { flex-direction: column; align-items: stretch; }
             .entry-row .remove-btn { margin-left: 0; align-self: flex-end; }
+            .form-grid { grid-template-columns: 1fr; }
+            .mood-btn { width: 38px; height: 38px; font-size: 18px; }
         }
 
         @media (max-width: 480px) {
@@ -993,6 +1174,7 @@
                             <th>Siestas</th>
                             <th>Total Sue&#241;o</th>
                             <th>Despertares</th>
+                            <th>Tomas</th>
                             <th>Calidad</th>
                         </tr>
                     </thead>
@@ -1022,6 +1204,26 @@
         const DAY_LABELS_FULL = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'];
         const MOTIVOS = ['Hambre','Dolor','Ruido','Sueno','Panal','Otro'];
         const CALIDADES = ['Buena','Regular','Mala'];
+        const HUMORES = [
+            { emoji: '\u{1F60A}', label: 'Contento' },
+            { emoji: '\u{1F610}', label: 'Tranquilo' },
+            { emoji: '\u{1F622}', label: 'Lloron' },
+            { emoji: '\u{1F62D}', label: 'Muy lloron' },
+            { emoji: '\u{1F634}', label: 'Somnoliento' },
+            { emoji: '\u{1F620}', label: 'Irritable' }
+        ];
+        const COMO_SE_DURMIO = ['Solo','Con ayuda','Meceiendolo','Al pecho','Otro'];
+        const TIEMPOS_ESPERA = ['0-5 min','5-10 min','10-15 min','15-20 min','+20 min'];
+
+        function createEmptyDay() {
+            return {
+                wakeUp: { time: '', humor: '' },
+                naps: [],
+                nightWakings: [],
+                tomasLeche: [],
+                notes: ''
+            };
+        }
 
         let appData = {
             metadata: { babyName: '', createdAt: new Date().toISOString(), lastModified: new Date().toISOString() },
@@ -1197,9 +1399,14 @@
             const weekData = getWeekData();
             const dayName = DAYS[dayIndex];
             if (!weekData.days[dayName]) {
-                weekData.days[dayName] = { wakeUp: '', naps: [], nightWakings: [], notes: '' };
+                weekData.days[dayName] = createEmptyDay();
             }
-            return weekData.days[dayName];
+            const d = weekData.days[dayName];
+            if (!d.wakeUp || typeof d.wakeUp === 'string') {
+                d.wakeUp = { time: d.wakeUp || '', humor: '' };
+            }
+            if (!d.tomasLeche) d.tomasLeche = [];
+            return d;
         }
 
         function buildDayTabs() {
@@ -1233,19 +1440,55 @@
 
             let html = '';
 
+            // DESPERTAR MATUTINO
+            const wakeTime = (d.wakeUp && typeof d.wakeUp === 'object') ? d.wakeUp.time : (d.wakeUp || '');
+            const wakeHumor = (d.wakeUp && typeof d.wakeUp === 'object') ? d.wakeUp.humor : '';
             html += `<div class="card">
                 <div class="card-header">
                     <span class="card-icon">&#9728;&#65039;</span>
                     <h3>Despertar Matutino</h3>
                 </div>
                 <div class="card-body">
-                    <div class="form-group">
-                        <label class="form-label">Hora de despertar - ${dateStr}</label>
-                        <input type="time" class="time-input" value="${d.wakeUp||''}" onchange="updateWakeUp(${currentDayIndex},this.value)">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Hora de despertar</label>
+                            <input type="time" class="time-input" value="${wakeTime}" onchange="updateWakeUpTime(${currentDayIndex},this.value)">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Humor al despertar</label>
+                            <div class="mood-selector">
+                                ${HUMORES.map(h => `<button type="button" class="mood-btn ${wakeHumor===h.label?'active':''}" onclick="updateWakeUpHumor(${currentDayIndex},'${h.label}')" title="${h.label}">${h.emoji}</button>`).join('')}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>`;
 
+            // TOMAS DE LECHE (Timeline creativo)
+            html += `<div class="card">
+                <div class="card-header">
+                    <span class="card-icon">&#129371;</span>
+                    <h3>Tomas de Leche del D&#237;a</h3>
+                </div>
+                <div class="card-body">
+                    <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px;">Registra cada toma de leche con su horario</p>`;
+            if (d.tomasLeche && d.tomasLeche.length > 0) {
+                html += `<div class="milk-timeline">`;
+                d.tomasLeche.forEach((t, idx) => {
+                    html += `<div class="milk-chip">
+                        &#129371; ${t.hora || '--:--'}
+                        <button class="remove-milk" onclick="removeMilk(${currentDayIndex},${idx})">&#10005;</button>
+                    </div>`;
+                });
+                html += `</div>`;
+            }
+            html += `<div style="display:flex;gap:8px;margin-top:12px;align-items:center;">
+                    <input type="time" class="time-input" id="newMilkTime" style="width:120px;">
+                    <button class="add-btn" style="width:auto;margin:0;" onclick="addMilk(${currentDayIndex})">+ Agregar Toma</button>
+                </div>
+            </div>`;
+
+            // SIESTAS
             html += `<div class="card">
                 <div class="card-header">
                     <span class="card-icon">&#127769;</span>
@@ -1255,15 +1498,59 @@
 
             if (d.naps && d.naps.length > 0) {
                 d.naps.forEach((nap, idx) => {
-                    html += `<div class="entry-row">
-                        <label>Siesta ${idx+1}:</label>
-                        <input type="time" class="time-input" value="${nap.inicio||''}" onchange="updateNap(${currentDayIndex},${idx},'inicio',this.value)" placeholder="Inicio">
-                        <span style="color:var(--text-muted); font-weight:600;">&#8594;</span>
-                        <input type="time" class="time-input" value="${nap.fin||''}" onchange="updateNap(${currentDayIndex},${idx},'fin',this.value)" placeholder="Fin">
-                        <select class="select-input quality-${(nap.calidad||'Buena').toLowerCase()}" onchange="updateNapCalidad(${currentDayIndex},${idx},this.value);this.className='select-input quality-'+this.value.toLowerCase()">
-                            ${CALIDADES.map(c=>`<option value="${c}" ${nap.calidad===c?'selected':''}>${c}</option>`).join('')}
-                        </select>
-                        <button class="remove-btn" onclick="removeNap(${currentDayIndex},${idx})" title="Eliminar">&#10005;</button>
+                    html += `<div class="nap-detail">
+                        <div class="nap-detail-header">
+                            <h4>&#128564; Siesta ${idx+1}</h4>
+                            <button class="remove-btn" onclick="removeNap(${currentDayIndex},${idx})" title="Eliminar">&#10005;</button>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Inicio de la siesta</label>
+                                <input type="time" class="time-input" value="${nap.inicio||''}" onchange="updateNap(${currentDayIndex},${idx},'inicio',this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Se durmi&#243;</label>
+                                <select class="select-input" onchange="updateNap(${currentDayIndex},${idx},'seDurmio',this.value)" style="width:100%">
+                                    <option value="">Seleccionar...</option>
+                                    ${COMO_SE_DURMIO.map(m=>`<option value="${m}" ${nap.seDurmio===m?'selected':''}>${m}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Tiempo despierto antes de siesta</label>
+                                <select class="select-input" onchange="updateNap(${currentDayIndex},${idx},'tiempoDespierto',this.value)" style="width:100%">
+                                    <option value="">Seleccionar...</option>
+                                    ${TIEMPOS_ESPERA.map(t=>`<option value="${t}" ${nap.tiempoDespierto===t?'selected':''}>${t}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Se despert&#243;</label>
+                                <input type="time" class="time-input" value="${nap.fin||''}" onchange="updateNap(${currentDayIndex},${idx},'fin',this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Duraci&#243;n de la siesta</label>
+                                <input type="text" class="short-text-input" value="${nap.duracion||''}" placeholder="Ej: 1h 30min" onchange="updateNap(${currentDayIndex},${idx},'duracion',this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Calidad</label>
+                                <select class="select-input quality-${(nap.calidad||'Buena').toLowerCase()}" onchange="updateNapCalidad(${currentDayIndex},${idx},this.value);this.className='select-input quality-'+this.value.toLowerCase()" style="width:100%">
+                                    ${CALIDADES.map(c=>`<option value="${c}" ${nap.calidad===c?'selected':''}>${c}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div class="form-group full-width">
+                                <label class="form-label">Humor al despertar</label>
+                                <div class="mood-selector">
+                                    ${HUMORES.map(h => `<button type="button" class="mood-btn ${(nap.humor||'')===h.label?'active':''}" onclick="updateNap(${currentDayIndex},${idx},'humor','${h.label}');renderDayView()" title="${h.label}">${h.emoji}</button>`).join('')}
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <label class="form-label">&#191;Hice algo diferente?</label>
+                                <input type="text" class="short-text-input" value="${nap.hizoAlgoDiferente||''}" placeholder="Ej: Cambie la rutina, nuevo lugar..." onchange="updateNap(${currentDayIndex},${idx},'hizoAlgoDiferente',this.value)">
+                            </div>
+                            <div class="form-group full-width">
+                                <label class="form-label">Comentarios</label>
+                                <input type="text" class="short-text-input" value="${nap.comentarios||''}" placeholder="Algo para recordar..." onchange="updateNap(${currentDayIndex},${idx},'comentarios',this.value)">
+                            </div>
+                        </div>
                     </div>`;
                 });
             } else {
@@ -1272,11 +1559,11 @@
                     <p>No hay siestas registradas</p>
                 </div>`;
             }
-
             html += `<button class="add-btn" onclick="addNap()">+ Agregar Siesta</button>
                 </div>
             </div>`;
 
+            // DESPERTARES NOCTURNOS
             html += `<div class="card">
                 <div class="card-header">
                     <span class="card-icon">&#127749;</span>
@@ -1286,14 +1573,42 @@
 
             if (d.nightWakings && d.nightWakings.length > 0) {
                 d.nightWakings.forEach((w, idx) => {
-                    html += `<div class="entry-row">
-                        <label>Despertar ${idx+1}:</label>
-                        <input type="time" class="time-input" value="${w.hora||''}" onchange="updateNightWaking(${currentDayIndex},${idx},'hora',this.value)">
-                        <input type="text" class="text-input" value="${w.duracion||''}" placeholder="min" onchange="updateNightWaking(${currentDayIndex},${idx},'duracion',this.value)">
-                        <select class="select-input" onchange="updateNightWaking(${currentDayIndex},${idx},'motivo',this.value)">
-                            ${MOTIVOS.map(m=>`<option value="${m}" ${w.motivo===m?'selected':''}>${m}</option>`).join('')}
-                        </select>
-                        <button class="remove-btn" onclick="removeNightWaking(${currentDayIndex},${idx})" title="Eliminar">&#10005;</button>
+                    html += `<div class="night-detail">
+                        <div class="night-detail-header">
+                            <h4>&#127749; Despertar ${idx+1}</h4>
+                            <button class="remove-btn" onclick="removeNightWaking(${currentDayIndex},${idx})" title="Eliminar">&#10005;</button>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Se despert&#243;</label>
+                                <input type="time" class="time-input" value="${w.hora||''}" onchange="updateNightWaking(${currentDayIndex},${idx},'hora',this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Se durmi&#243;</label>
+                                <input type="time" class="time-input" value="${w.seDurmio||''}" onchange="updateNightWaking(${currentDayIndex},${idx},'seDurmio',this.value)">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">C&#243;mo se durmi&#243;</label>
+                                <select class="select-input" onchange="updateNightWaking(${currentDayIndex},${idx},'comoSeDurmi',this.value)" style="width:100%">
+                                    <option value="">Seleccionar...</option>
+                                    ${COMO_SE_DURMIO.map(m=>`<option value="${m}" ${w.comoSeDurmi===m?'selected':''}>${m}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Toma de leche</label>
+                                <div class="toggle-row">
+                                    <label class="toggle-switch">
+                                        <input type="checkbox" ${w.tomaLeche?'checked':''} onchange="updateNightWaking(${currentDayIndex},${idx},'tomaLeche',this.checked)">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                    <span class="toggle-label">${w.tomaLeche ? '&#129371; S&#237;' : 'No'}</span>
+                                </div>
+                            </div>
+                            <div class="form-group full-width">
+                                <label class="form-label">Comentarios</label>
+                                <input type="text" class="short-text-input" value="${w.comentarios||''}" placeholder="Algo para recordar..." onchange="updateNightWaking(${currentDayIndex},${idx},'comentarios',this.value)">
+                            </div>
+                        </div>
                     </div>`;
                 });
             } else {
@@ -1302,11 +1617,11 @@
                     <p>No hay despertares nocturnos</p>
                 </div>`;
             }
-
             html += `<button class="add-btn" onclick="addNightWaking()">+ Agregar Despertar Nocturno</button>
                 </div>
             </div>`;
 
+            // NOTAS DEL DIA
             html += `<div class="card">
                 <div class="card-header">
                     <span class="card-icon">&#128221;</span>
@@ -1326,32 +1641,46 @@
             container.innerHTML = html;
         }
 
-        function updateWakeUp(i, v) { getDayData(i).wakeUp = v; saveData(); updateDashboard(); }
+        function updateWakeUpTime(i, v) {
+            const d = getDayData(i);
+            if (!d.wakeUp || typeof d.wakeUp === 'string') d.wakeUp = { time: '', humor: '' };
+            d.wakeUp.time = v;
+            saveData();
+            updateDashboard();
+        }
+        function updateWakeUpHumor(i, v) {
+            const d = getDayData(i);
+            if (!d.wakeUp || typeof d.wakeUp === 'string') d.wakeUp = { time: '', humor: '' };
+            d.wakeUp.humor = v;
+            saveData();
+            renderDayView();
+        }
         function updateNap(i, idx, field, v) {
             const d = getDayData(i);
-            if (!d.naps[idx]) d.naps[idx] = { inicio: '', fin: '', calidad: 'Buena' };
+            if (!d.naps[idx]) d.naps[idx] = { inicio: '', seDurmio: '', tiempoDespierto: '', fin: '', duracion: '', calidad: 'Buena', humor: '', hizoAlgoDiferente: '', comentarios: '', tomaLeche: false };
             d.naps[idx][field] = v;
             saveData();
             updateDashboard();
         }
         function updateNapCalidad(i, idx, v) {
             const d = getDayData(i);
-            if (!d.naps[idx]) d.naps[idx] = { inicio: '', fin: '', calidad: 'Buena' };
+            if (!d.naps[idx]) d.naps[idx] = { inicio: '', seDurmio: '', tiempoDespierto: '', fin: '', duracion: '', calidad: 'Buena', humor: '', hizoAlgoDiferente: '', comentarios: '', tomaLeche: false };
             d.naps[idx].calidad = v;
             saveData();
             updateDashboard();
         }
         function updateNightWaking(i, idx, field, v) {
             const d = getDayData(i);
-            if (!d.nightWakings[idx]) d.nightWakings[idx] = { hora: '', duracion: '', motivo: 'Hambre' };
+            if (!d.nightWakings[idx]) d.nightWakings[idx] = { hora: '', seDurmio: '', comoSeDurmi: '', tomaLeche: false, comentarios: '' };
             d.nightWakings[idx][field] = v;
             saveData();
+            renderDayView();
             updateDashboard();
         }
         function updateDayNotes(i, v) { getDayData(i).notes = v; saveData(); }
 
         function addNap() {
-            getDayData(currentDayIndex).naps.push({ inicio: '', fin: '', calidad: 'Buena' });
+            getDayData(currentDayIndex).naps.push({ inicio: '', seDurmio: '', tiempoDespierto: '', fin: '', duracion: '', calidad: 'Buena', humor: '', hizoAlgoDiferente: '', comentarios: '', tomaLeche: false });
             saveData();
             renderDayView();
         }
@@ -1364,7 +1693,7 @@
         }
 
         function addNightWaking() {
-            getDayData(currentDayIndex).nightWakings.push({ hora: '', duracion: '', motivo: 'Hambre' });
+            getDayData(currentDayIndex).nightWakings.push({ hora: '', seDurmio: '', comoSeDurmi: '', tomaLeche: false, comentarios: '' });
             saveData();
             renderDayView();
         }
@@ -1376,11 +1705,25 @@
             updateDashboard();
         }
 
+        function addMilk(i) {
+            const input = document.getElementById('newMilkTime');
+            if (!input || !input.value) { alert('Selecciona una hora primero'); return; }
+            getDayData(i).tomasLeche.push({ hora: input.value });
+            saveData();
+            renderDayView();
+        }
+
+        function removeMilk(i, idx) {
+            getDayData(i).tomasLeche.splice(idx, 1);
+            saveData();
+            renderDayView();
+        }
+
         function clearDay() {
             if (confirm('Limpiar todos los datos de este d\u00eda?')) {
                 const weekData = getWeekData();
                 const dayName = DAYS[currentDayIndex];
-                weekData.days[dayName] = { wakeUp: '', naps: [], nightWakings: [], notes: '' };
+                weekData.days[dayName] = createEmptyDay();
                 saveData();
                 renderDayView();
                 updateDashboard();
@@ -1421,7 +1764,16 @@
             const name = appData.metadata.babyName || 'bebe';
             const filename = `rutina-${name.toLowerCase().replace(/\s+/g,'-')}-${formatDate(new Date())}.csv`;
             let csv = '\uFEFF';
-            csv += 'Semana,Ano,Mes,Dia,Fecha,Despertar,Siesta 1 Inicio,Siesta 1 Fin,Siesta 1 Calidad,Siesta 2 Inicio,Siesta 2 Fin,Siesta 2 Calidad,Siesta 3 Inicio,Siesta 3 Fin,Siesta 3 Calidad,Total Siestas,Despertar Nocturno 1 Hora,Despertar Nocturno 1 Duracion,Despertar Nocturno 1 Motivo,Despertar Nocturno 2 Hora,Despertar Nocturno 2 Duracion,Despertar Nocturno 2 Motivo,Total Despertares Nocturnos,Notas Dia,Notas Semana,Observaciones Profesional\n';
+            csv += 'Semana,Ano,Mes,Dia,Fecha,Despertar Hora,Despertar Humor,';
+            csv += 'Siesta 1 Inicio,Siesta 1 Se Durmio,Siesta 1 Tiempo Espera,Siesta 1 Fin,Siesta 1 Duracion,Siesta 1 Calidad,Siesta 1 Humor,Siesta 1 Hizo Algo Diferente,Siesta 1 Comentarios,';
+            csv += 'Siesta 2 Inicio,Siesta 2 Se Durmio,Siesta 2 Tiempo Espera,Siesta 2 Fin,Siesta 2 Duracion,Siesta 2 Calidad,Siesta 2 Humor,Siesta 2 Hizo Algo Diferente,Siesta 2 Comentarios,';
+            csv += 'Siesta 3 Inicio,Siesta 3 Se Durmio,Siesta 3 Tiempo Espera,Siesta 3 Fin,Siesta 3 Duracion,Siesta 3 Calidad,Siesta 3 Humor,Siesta 3 Hizo Algo Diferente,Siesta 3 Comentarios,';
+            csv += 'Total Siestas,';
+            csv += 'Despertar Noc 1 Hora,Despertar Noc 1 Se Durmio,Despertar Noc 1 Como Durmio,Despertar Noc 1 Toma Leche,Despertar Noc 1 Comentarios,';
+            csv += 'Despertar Noc 2 Hora,Despertar Noc 2 Se Durmio,Despertar Noc 2 Como Durmio,Despertar Noc 2 Toma Leche,Despertar Noc 2 Comentarios,';
+            csv += 'Total Despertares Nocturnos,';
+            csv += 'Tomas de Leche,Totas Horas Leche,';
+            csv += 'Notas Dia,Notas Semana,Observaciones Profesional\n';
 
             Object.keys(appData.semanas).sort().forEach(weekId => {
                 const week = appData.semanas[weekId];
@@ -1431,11 +1783,13 @@
                 const weekStart = getWeekStart(parseInt(year), parseInt(weekNum));
 
                 DAYS.forEach((day, i) => {
-                    const d = week.days[day] || { wakeUp: '', naps: [], nightWakings: [], notes: '' };
+                    const d = week.days[day] || createEmptyDay();
                     const dayDate = new Date(weekStart);
                     dayDate.setDate(dayDate.getDate() + i);
                     const fecha = formatDate(dayDate);
                     const mes = MONTHS[dayDate.getMonth()];
+                    const wakeTime = (d.wakeUp && typeof d.wakeUp === 'object') ? d.wakeUp.time : (d.wakeUp || '');
+                    const wakeHumor = (d.wakeUp && typeof d.wakeUp === 'object') ? d.wakeUp.humor : '';
 
                     const naps = d.naps || [];
                     const nap1 = naps[0] || {};
@@ -1448,16 +1802,22 @@
                     const wake2 = wakes[1] || {};
                     const totalWakes = wakes.filter(w => w.hora).length;
 
+                    const milk = d.tomasLeche || [];
+                    const totalMilk = milk.filter(t => t.hora).length;
+                    const milkTimes = milk.map(t => t.hora).join(' | ');
+
                     const escCsv = (s) => `"${(s||'').replace(/"/g,'""')}"`;
 
-                    csv += `${weekId},${year},${mes},${DAY_LABELS_FULL[i]},${fecha},${d.wakeUp||''},`;
-                    csv += `${nap1.inicio||''},${nap1.fin||''},${nap1.calidad||''},`;
-                    csv += `${nap2.inicio||''},${nap2.fin||''},${nap2.calidad||''},`;
-                    csv += `${nap3.inicio||''},${nap3.fin||''},${nap3.calidad||''},`;
+                    csv += `${weekId},${year},${mes},${DAY_LABELS_FULL[i]},${fecha},`;
+                    csv += `${wakeTime},${wakeHumor},`;
+                    csv += `${nap1.inicio||''},${nap1.seDurmio||''},${nap1.tiempoDespierto||''},${nap1.fin||''},${nap1.duracion||''},${nap1.calidad||''},${nap1.humor||''},${nap1.hizoAlgoDiferente||''},${nap1.comentarios||''},`;
+                    csv += `${nap2.inicio||''},${nap2.seDurmio||''},${nap2.tiempoDespierto||''},${nap2.fin||''},${nap2.duracion||''},${nap2.calidad||''},${nap2.humor||''},${nap2.hizoAlgoDiferente||''},${nap2.comentarios||''},`;
+                    csv += `${nap3.inicio||''},${nap3.seDurmio||''},${nap3.tiempoDespierto||''},${nap3.fin||''},${nap3.duracion||''},${nap3.calidad||''},${nap3.humor||''},${nap3.hizoAlgoDiferente||''},${nap3.comentarios||''},`;
                     csv += `${totalNaps},`;
-                    csv += `${wake1.hora||''},${wake1.duracion||''},${wake1.motivo||''},`;
-                    csv += `${wake2.hora||''},${wake2.duracion||''},${wake2.motivo||''},`;
+                    csv += `${wake1.hora||''},${wake1.seDurmio||''},${wake1.comoSeDurmi||''},${wake1.tomaLeche?'Si':'No'},${wake1.comentarios||''},`;
+                    csv += `${wake2.hora||''},${wake2.seDurmio||''},${wake2.comoSeDurmi||''},${wake2.tomaLeche?'Si':'No'},${wake2.comentarios||''},`;
                     csv += `${totalWakes},`;
+                    csv += `${totalMilk},"${milkTimes}",`;
                     csv += `${escCsv(d.notes)},${escCsv(week.notes||'')},${escCsv(appData.psychologistNotes||'')}\n`;
                 });
             });
@@ -1521,12 +1881,13 @@
 
         function calculateStats() {
             const weekData = getWeekData();
-            let totalSleepMinutes = 0, sleepDays = 0, totalNaps = 0, totalNightWakings = 0;
+            let totalSleepMinutes = 0, sleepDays = 0, totalNaps = 0, totalNightWakings = 0, totalMilk = 0;
             let qualityCount = { 'Buena': 0, 'Regular': 0, 'Mala': 0 };
 
             DAYS.forEach(day => {
                 const d = weekData.days[day] || {};
-                if (d.wakeUp) {
+                const wakeTime = (d.wakeUp && typeof d.wakeUp === 'object') ? d.wakeUp.time : d.wakeUp;
+                if (wakeTime) {
                     if (d.naps) {
                         d.naps.forEach(nap => {
                             if (nap.inicio && nap.fin) {
@@ -1542,6 +1903,7 @@
                     sleepDays++;
                 }
                 if (d.nightWakings) totalNightWakings += d.nightWakings.filter(w => w.hora).length;
+                if (d.tomasLeche) totalMilk += d.tomasLeche.filter(t => t.hora).length;
             });
 
             const avgSleepHours = sleepDays > 0 ? (totalSleepMinutes / 60 / sleepDays).toFixed(1) : '0';
@@ -1560,7 +1922,7 @@
                 }
             }
 
-            return { avgSleepHours, sleepChange: 0, totalNaps, avgNapsPerDay, avgNightWakings, wakingChange: 0, bestQuality, qualityPercent };
+            return { avgSleepHours, sleepChange: 0, totalNaps, avgNapsPerDay, avgNightWakings, wakingChange: 0, bestQuality, qualityPercent, totalMilk };
         }
 
         function updateStats() {
@@ -1569,6 +1931,7 @@
                 <div class="stat-card"><div class="stat-icon">&#128164;</div><div class="stat-value">${stats.avgSleepHours}h</div><div class="stat-label">Promedio Sue&#241;o Nocturno</div></div>
                 <div class="stat-card"><div class="stat-icon">&#128564;</div><div class="stat-value">${stats.totalNaps}</div><div class="stat-label">Total Siestas Semana</div><div class="stat-change neutral">Promedio ${stats.avgNapsPerDay}/d&#237;a</div></div>
                 <div class="stat-card"><div class="stat-icon">&#127749;</div><div class="stat-value">${stats.avgNightWakings}</div><div class="stat-label">Despertares Nocturnos/D&#237;a</div></div>
+                <div class="stat-card"><div class="stat-icon">&#129371;</div><div class="stat-value">${stats.totalMilk}</div><div class="stat-label">Tomas de Leche Semana</div></div>
                 <div class="stat-card"><div class="stat-icon">&#127919;</div><div class="stat-value">${stats.bestQuality}</div><div class="stat-label">Calidad Predominante</div><div class="stat-change neutral">${stats.qualityPercent}% de los d&#237;as</div></div>
             `;
         }
@@ -1642,6 +2005,7 @@
             let html = '';
             DAYS.forEach((day, i) => {
                 const d = weekData.days[day] || {};
+                const wakeTime = (d.wakeUp && typeof d.wakeUp === 'object') ? d.wakeUp.time : d.wakeUp;
                 const napCount = (d.naps || []).filter(n => n.inicio).length;
                 const wakingCount = (d.nightWakings || []).filter(w => w.hora).length;
                 let totalNapMinutes = 0;
@@ -1654,7 +2018,8 @@
                 const qualities = (d.naps || []).map(n => n.calidad).filter(Boolean);
                 const mainQuality = qualities.length > 0 ? qualities.sort((a,b) => qualities.filter(v => v===b).length - qualities.filter(v => v===a).length)[0] : '-';
                 const qualityClass = mainQuality !== '-' ? `quality-${mainQuality.toLowerCase()}` : '';
-                html += `<tr><td><strong>${DAY_LABELS[i]}</strong></td><td>${d.wakeUp||'-'}</td><td>${napCount}</td><td>${(totalNapMinutes/60).toFixed(1)}h</td><td>${wakingCount}</td><td><span class="${qualityClass}">${mainQuality}</span></td></tr>`;
+                const milkCount = (d.tomasLeche || []).filter(t => t.hora).length;
+                html += `<tr><td><strong>${DAY_LABELS[i]}</strong></td><td>${wakeTime||'-'}</td><td>${napCount}</td><td>${(totalNapMinutes/60).toFixed(1)}h</td><td>${wakingCount}</td><td>${milkCount}</td><td><span class="${qualityClass}">${mainQuality}</span></td></tr>`;
             });
             document.getElementById('summaryBody').innerHTML = html;
         }
